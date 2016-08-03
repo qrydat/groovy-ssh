@@ -31,8 +31,9 @@ test:
     - ./os-integration-test/setup-ssh.sh
 
   override:
-    - ./gradlew check
-    - ./plugin-integration/run-plugin-integration-test.sh
+    - |
+      ./gradlew --daemon check
+      ./plugin-integration/run-plugin-integration-test.sh
 
   post:
     - |
