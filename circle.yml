@@ -1,9 +1,10 @@
 machine:
   java:
-    version: openjdk7
+    version: openjdk8
   environment:
     TERM: dumb
     GRADLE_OPTS: -Xmx1g -Xms1g
+    JAVA6_HOME: $HOME/jdk1.6.0_45
   hosts:
     sandbox.local: 127.0.0.1
   services:
@@ -23,6 +24,12 @@ checkout:
       git -C plugin-integration clone --depth 1 https://github.com/int128/gradle-ssh-plugin
 
 dependencies:
+  pre:
+    - |
+      cd
+      curl -LO -b 'oraclelicense=accept-securebackup-cookie' -b 'gpw_e24=http%3A%2F%2Fwww.oracle.com' 'http://download.oracle.com/otn/java/jdk/6u45-b06/jre-6u45-linux-x64.bin'
+      sh jre-6u45-linux-x64.bin
+      test -d "$JAVA6_HOME"
   override:
     - ./gradlew testClasses
 

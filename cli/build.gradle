@@ -4,8 +4,13 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_6
-targetCompatibility = JavaVersion.VERSION_1_6
+configure([compileJava, compileGroovy]) {
+    sourceCompatibility = JavaVersion.VERSION_1_6
+    targetCompatibility = JavaVersion.VERSION_1_6
+    if (System.getenv('JAVA6_HOME')) {
+        options.bootClasspath = "${System.getenv('JAVA6_HOME')}/jre/lib/rt.jar"
+    }
+}
 
 mainClassName = 'org.hidetake.groovy.ssh.Main'
 
@@ -39,6 +44,10 @@ shadowJar {
 }
 
 runShadow {
+    if (System.getenv('JAVA6_HOME')) {
+        // verify runnable on Java 6
+        executable "${System.getenv('JAVA6_HOME')}/bin/java"
+    }
     args 'gssh-example.groovy'
 }
 
